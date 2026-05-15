@@ -1,0 +1,6 @@
+# This is the CODEOWNERS file.
+# It defines who is responsible for different parts of the codebase.
+
+* @kalviumcommunity/devops-instructors
+/src/payments.js @kalviumcommunity/fintech-team
+/src/auth.js @kalviumcommunity/security-team
