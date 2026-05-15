@@ -1,46 +1,53 @@
 const express = require('express');
+require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+/**
+ * Root endpoint
+ */
 app.get('/', (req, res) => {
-  res.send('Workflow Charter Drill API');
+    res.send('Workflow Charter Drill API - Stable Version');
 });
 
+/**
+ * Health check endpoint
+ */
 app.get('/status', (req, res) => {
-res.json({ status: 'ok', timestamp: new Date() });
+    res.json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        version: '1.0.0'
+    });
 });
 
+/**
+ * Data processing endpoint
+ */
 app.post('/data', (req, res) => {
     const data = req.body;
-    // Inconsistent indentation here
-  res.status(201).send({received: true, data});
+    if (!data) {
+        return res.status(400).json({ error: 'No data provided' });
+    }
+    res.status(201).json({ 
+        message: 'Data processed successfully',
+        receivedAt: new Date().toISOString()
+    });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
 });
-// change 1
-// change 2
-// change 3
-// change 4
-// change 5
-// change 6
-// change 7
-// change 8
-// change 9
-// change 10
-// change 11
-// change 12
-// change 14
-// change 16
- 
- 
-// change 20
-// change 21
-// change 22
-// change 23
-// change 24
-// change 25
-// change 5
+
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}
+
+module.exports = app;
